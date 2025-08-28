@@ -1,0 +1,49 @@
+local config = require("{{ theme_name }}.config")
+local theme = {}
+
+local function set_groups(colorscheme)
+	local background = config.transparent and "none" or colorscheme.background
+
+	local groups = {
+		Comment = { fg = colorscheme.disabled, italic = true },
+		Constant = { fg = colorscheme.highlight_3, italic = true },
+		DiagnosticError = { fg = colorscheme.error, bold = true },
+		DiagnosticHint = { fg = colorscheme.hint, bold = true },
+		DiagnosticInfo = { fg = colorscheme.info, bold = true },
+		DiagnosticWarn = { fg = colorscheme.warning, bold = true },
+		Directory = { fg = colorscheme.highlight_2 },
+		Function = { fg = colorscheme.highlight_2, bold = true },
+		GitSignsAdd = { fg = colorscheme.success },
+		GitSignsChange = { fg = colorscheme.warning },
+		GitSignsDelete = { fg = colorscheme.error },
+		Identifier = { fg = colorscheme.highlight_0 },
+		Keyword = { fg = colorscheme.foreground },
+		LineNr = { fg = colorscheme.disabled },
+		Normal = { fg = colorscheme.foreground, bg = background },
+		Operator = { fg = colorscheme.foreground },
+		StatusLine = { fg = colorscheme.foreground, bg = background },
+		String = { fg = colorscheme.success },
+		Todo = { bg = colorscheme.highlight_2, bold = true },
+		Type = { fg = colorscheme.highlight_0 },
+		["@variable"] = { fg = colorscheme.highlight_1 },
+		Visual = { fg = colorscheme.background, bg = colorscheme.foreground },
+	}
+
+	groups =
+		vim.tbl_extend("force", groups, type(config.overrides) == "function" and config.overrides() or config.overrides)
+
+	for group, parameters in pairs(groups) do
+		vim.api.nvim_set_hl(0, group, parameters)
+	end
+end
+
+function theme.colorscheme()
+	vim.api.nvim_command("hi clear")
+	package.loaded["{{ theme_name }}.colorscheme"] = nil
+
+	local colorscheme = require("{{ theme_name }}.colorscheme")
+	set_groups(colorscheme)
+	vim.g.colors_name = colorscheme.name
+end
+
+return theme

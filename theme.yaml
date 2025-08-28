@@ -1,0 +1,22 @@
+---
+name: "mrgreengenes"
+enabled_for:
+  - alacritty
+  - fish
+  - lazygit
+  - nvim
+  - tmux
+style:
+  colors:
+    black: "000000"
+    blue: "0D8FFF"
+    cyan: "00EDED"
+    green: "0A4200"
+    lightgreen: "45D42A"
+    lightred: "FF4242"
+    lightyellow: "FFFF00"
+    orange: "FF8800"
+    pink: "FF5EF2"
+    red: "B02615"
+    yellow: "FFE787"
+  font: "JetBrainsMono Nerd Font Mono"
