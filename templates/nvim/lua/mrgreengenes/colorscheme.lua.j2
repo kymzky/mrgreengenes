@@ -1,0 +1,47 @@
+local colors = {
+	black = "#000000",
+	blue = "#0D8FFF",
+	cyan = "#00EDED",
+	green = "#0A4200",
+	lightgreen = "#45D42A",
+	lightred = "#FF4242",
+	lightyellow = "#FFFF00",
+	orange = "#FF8800",
+	pink = "#FF5EF2",
+	red = "#B02615",
+	yellow = "#FFE787",
+}
+
+local colorscheme = {}
+
+if vim.o.background == "light" then
+	colorscheme.name = "{{ theme_name }}-light"
+	colorscheme.background = colors.yellow
+	colorscheme.foreground = colors.black
+	colorscheme.disabled = colors.orange
+	colorscheme.success = colors.lightgreen
+	colorscheme.hint = colors.cyan
+	colorscheme.info = colors.orange
+	colorscheme.warning = colors.lightyellow
+	colorscheme.error = colors.red
+	colorscheme.highlight_0 = colors.lightred
+	colorscheme.highlight_1 = colors.green
+	colorscheme.highlight_2 = colors.blue
+	colorscheme.highlight_3 = colors.pink
+else
+	colorscheme.name = "{{ theme_name }}-dark"
+	colorscheme.background = colors.green
+	colorscheme.foreground = colors.yellow
+	colorscheme.disabled = colors.black
+	colorscheme.success = colors.lightgreen
+	colorscheme.hint = colors.cyan
+	colorscheme.info = colors.lightyellow
+	colorscheme.warning = colors.orange
+	colorscheme.error = colors.red
+	colorscheme.highlight_0 = colors.orange
+	colorscheme.highlight_1 = colors.lightred
+	colorscheme.highlight_2 = colors.blue
+	colorscheme.highlight_3 = colors.pink
+end
+
+return colorscheme

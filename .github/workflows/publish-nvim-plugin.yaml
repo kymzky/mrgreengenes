@@ -1,0 +1,57 @@
+name: Publish Neovim plugin
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DEPLOY_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Checkout source repo
+        uses: actions/checkout@v4
+        with:
+          path: mrgreengenes
+
+      - name: Install dependencies
+        working-directory: mrgreengenes
+        run: pip install -r requirements.txt
+
+      - name: Run generate.py
+        working-directory: mrgreengenes
+        run: python generate.py
+
+      - name: Clone target repo
+        run: git clone git@github.com:kymzky/mrgreengenes.nvim.git mrgreengenes.nvim
+
+      - name: Sync generated plugin
+        run: rsync -av --delete --exclude '.git' mrgreengenes/output/nvim/mrgreengenes/ mrgreengenes.nvim/
+
+      - name: Commit and push changes
+        working-directory: mrgreengenes.nvim
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Publish Neovim plugin"
+            git push origin main
+          fi
+          git tag ${{ github.ref_name }}
+          git push --tags
