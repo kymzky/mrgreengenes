@@ -8,6 +8,7 @@ set -g status-left ""
 set -g status-right ""
 
 set -g status-style bg=default
+setw -g window-status-current-style none
 setw -g window-status-format '#[fg=#{{ yellow }} bg=#{{ red }}] #I #[fg=#{{ black }} bg=#{{ yellow }}] #W '
 setw -g window-status-current-format '#[fg=#{{ yellow }} bg=#{{ red }}] #I #[fg=#{{ black }} bg=#{{ orange }}] #W '
 set -g message-style 'fg=#{{ black }} bg=#{{ orange }}'
