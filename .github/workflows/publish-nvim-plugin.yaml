@@ -10,13 +10,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Set up SSH
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.DEPLOY_KEY }}" > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
-          ssh-keyscan github.com >> ~/.ssh/known_hosts
-
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -35,8 +28,12 @@ jobs:
         working-directory: mrgreengenes
         run: python generate.py
 
-      - name: Clone target repo
-        run: git clone git@github.com:kymzky/mrgreengenes.nvim.git mrgreengenes.nvim
+      - name: Checkout target repo
+        uses: actions/checkout@v4
+        with:
+          repository: kymzky/mrgreengenes.nvim
+          token: ${{ secrets.MRGREENGENES_NVIM_TOKEN }}
+          path: mrgreengenes.nvim
 
       - name: Sync generated plugin
         run: rsync -av --delete --exclude '.git' mrgreengenes/output/nvim/mrgreengenes/ mrgreengenes.nvim/
