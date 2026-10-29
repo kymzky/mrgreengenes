@@ -5,6 +5,7 @@ enabled_for:
   - fish
   - lazygit
   - nvim
+  - opencode
   - tmux
 style:
   colors:

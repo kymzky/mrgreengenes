@@ -1,0 +1,180 @@
+{%- macro mix(a, b, pct) -%}
+{%- for i in [0, 2, 4] %}{% set ca = "0123456789abcdef".index(a[i] | lower) * 16 + "0123456789abcdef".index(a[i + 1] | lower) %}{% set cb = "0123456789abcdef".index(b[i] | lower) * 16 + "0123456789abcdef".index(b[i + 1] | lower) %}{{ "%02x" % ((ca * (100 - pct) + cb * pct) / 100) | round | int }}{% endfor -%}
+{%- endmacro -%}
+{%- macro scale(name, color) -%}
+      "{{ name }}": {
+        "100": "#{{ mix(color, white, 30) }}",
+        "200": "#{{ color | lower }}",
+{%- for pct in [12, 25, 38, 52, 66, 80, 90] %}
+        "{{ (loop.index + 2) * 100 }}": "#{{ mix(color, green, pct) }}"{{ "," if not loop.last }}
+{%- endfor %}
+      },
+{%- endmacro -%}
+{
+  "base": {
+    "categorical": ["orange", "blue", "purple", "cyan", "green", "red"],
+    "text": {
+      "base": "$hue.neutral.200",
+      "muted": "$hue.neutral.400",
+      "action": {
+        "primary": {
+          "base": "$text.base",
+          "$disabled": "$hue.neutral.400",
+          "$focused": "#{{ black }}",
+          "$selected": "$hue.interactive.200"
+        },
+        "secondary": {
+          "base": "$text.muted",
+          "$hovered": "$text.base",
+          "$focused": "#{{ black }}"
+        },
+        "destructive": {
+          "base": "#{{ yellow }}",
+          "$disabled": "$hue.neutral.400"
+        }
+      },
+      "formfield": {
+        "base": "$hue.neutral.200",
+        "$hovered": "$hue.interactive.200",
+        "$focused": "$hue.interactive.200",
+        "$pressed": "$hue.interactive.200",
+        "$disabled": "$hue.neutral.400",
+        "$selected": "$hue.interactive.200"
+      },
+      "feedback": {
+        "error": { "base": "$hue.red.200" },
+        "warning": { "base": "$hue.orange.200" },
+        "success": { "base": "$hue.green.200" },
+        "info": { "base": "$hue.yellow.200" }
+      }
+    },
+    "background": {
+      "base": "$hue.neutral.800",
+      "raised": {
+        "base": "$hue.neutral.700",
+        "high": "$hue.neutral.600",
+        "max": "$hue.neutral.500"
+      },
+      "action": {
+        "primary": {
+          "base": "transparent",
+          "$hovered": "$hue.neutral.700",
+          "$focused": "$hue.interactive.200",
+          "$selected": "transparent"
+        },
+        "secondary": { "base": "transparent" },
+        "destructive": { "base": "#{{ red }}" }
+      },
+      "formfield": { "base": "$background.base" },
+      "feedback": {
+        "error": { "base": "$background.base" },
+        "warning": { "base": "$background.base" },
+        "success": { "base": "$background.base" },
+        "info": { "base": "$background.base" }
+      }
+    },
+    "border": { "base": "$hue.neutral.500" },
+    "scrollbar": { "base": "$hue.neutral.400" },
+    "diff": {
+      "text": {
+        "added": "$hue.green.200",
+        "removed": "$hue.red.200",
+        "context": "$hue.neutral.300",
+        "hunkHeader": "$hue.neutral.400"
+      },
+      "background": {
+        "added": "$hue.green.700",
+        "removed": "$hue.red.700",
+        "context": "$hue.neutral.700"
+      },
+      "highlight": {
+        "added": "$hue.green.100",
+        "removed": "$hue.red.100"
+      },
+      "lineNumber": {
+        "text": "$hue.neutral.400",
+        "background": {
+          "added": "$hue.green.800",
+          "removed": "$hue.red.800"
+        }
+      }
+    },
+    "syntax": {
+      "comment": "#{{ black }}",
+      "keyword": "$hue.neutral.200",
+      "function": "$hue.blue.200",
+      "variable": "$hue.red.200",
+      "string": "$hue.green.200",
+      "number": "$hue.purple.200",
+      "type": "$hue.orange.200",
+      "operator": "$hue.neutral.200",
+      "punctuation": "$hue.neutral.200"
+    },
+    "markdown": {
+      "text": "$hue.neutral.200",
+      "heading": "$hue.orange.200",
+      "link": "$hue.blue.200",
+      "linkText": "$hue.cyan.200",
+      "code": "$hue.green.200",
+      "blockQuote": "$hue.neutral.400",
+      "emphasis": "$hue.yellow.200",
+      "strong": "$hue.orange.200",
+      "horizontalRule": "$hue.neutral.400",
+      "listItem": "$hue.orange.200",
+      "listEnumeration": "$hue.orange.200",
+      "image": "$hue.blue.200",
+      "imageText": "$hue.cyan.200",
+      "codeBlock": "$hue.neutral.200"
+    },
+    "@dialog": {
+      "background": {
+        "base": "$background.raised.base",
+        "action": {
+          "primary": {
+            "$hovered": "$background.raised.high"
+          }
+        }
+      }
+    }
+  },
+  "dark": {
+    "hue": {
+      "gray": {
+        "100": "#{{ mix(yellow, white, 50) }}",
+        "200": "#{{ yellow | lower }}",
+        "300": "#{{ mix(yellow, green, 20) }}",
+        "400": "#{{ mix(yellow, green, 33) }}",
+        "500": "#{{ mix(green, lightgreen, 35) }}",
+        "600": "#{{ mix(green, lightgreen, 20) }}",
+        "700": "#{{ mix(green, lightgreen, 10) }}",
+        "800": "#{{ green | lower }}",
+        "900": "#{{ mix(green, black, 45) }}"
+      },
+{{ scale("red", lightred) }}
+{{ scale("orange", orange) }}
+{{ scale("yellow", lightyellow) }}
+{{ scale("green", lightgreen) }}
+{{ scale("cyan", cyan) }}
+{{ scale("blue", blue) }}
+{{ scale("purple", pink) }}
+      "accent": "$hue.green",
+      "interactive": "$hue.orange",
+      "neutral": "$hue.gray"
+    },
+    "diff": {
+      "text": {
+        "added": "$hue.green.100"
+      },
+      "background": {
+        "added": "#{{ mix(green, lightgreen, 18) }}",
+        "removed": "#{{ mix(red, black, 50) }}"
+      },
+      "lineNumber": {
+        "background": {
+          "added": "#{{ mix(green, lightgreen, 10) }}",
+          "removed": "#{{ mix(red, black, 62) }}"
+        }
+      }
+    }
+  }
+}

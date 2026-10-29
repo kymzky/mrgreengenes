@@ -20,6 +20,7 @@ Templates are used to generate colorscheme files for the following supported app
 - fish
 - Lazygit
 - Neovim
+- OpenCode
 - tmux
 
 Running the templates produces ready-to-use theme configurations for these applications.
@@ -36,4 +37,14 @@ All outputs can be generated locally by running:
 
 ```bash
 python generate.py
+```
+
+Note that this deletes the existing `output/` directory first.
+
+## Tests
+
+The tests run `generate.py` in a temporary copy of the repo, so they do not touch `output/`:
+
+```bash
+python tests/test_generate.py
 ```
