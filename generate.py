@@ -1,5 +1,5 @@
 import yaml
-from jinja2 import Environment, FileSystemLoader
+from jinja2 import Environment, FileSystemLoader, StrictUndefined
 import os
 import shutil
 
@@ -7,7 +7,9 @@ THEME_FILE = "theme.yaml"
 TEMPLATE_DIR = "templates"
 OUTPUT_DIR = "output"
 
-env = Environment(loader=FileSystemLoader(TEMPLATE_DIR))
+env = Environment(loader=FileSystemLoader(TEMPLATE_DIR), undefined=StrictUndefined)
+if os.path.exists(OUTPUT_DIR):
+    shutil.rmtree(OUTPUT_DIR)
 with open(THEME_FILE) as f:
     theme = yaml.safe_load(f)
 
@@ -32,7 +34,7 @@ for app in enabled_for:
             src_path = os.path.join(root, file_name)
             rel_path = os.path.relpath(src_path, template_app_dir)
             dst_path = os.path.join(
-                output_app_dir, rel_path.replace(".j2", ""))
+                output_app_dir, rel_path.removesuffix(".j2"))
 
             os.makedirs(os.path.dirname(dst_path), exist_ok=True)
 
